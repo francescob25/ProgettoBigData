@@ -1,6 +1,7 @@
 #import pandas as pd
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
+import re
 import os
 import sys
 
@@ -48,6 +49,13 @@ def filterBySpoilers(reviews):
 
 def filterByNoSpoilers(reviews):
     return reviews.filter(lambda x: not(str(x[0]).upper().__contains__("*SPOILER"))).map(lambda x: x[0])
+
+###################################### CERCA PER PAROLA ###################################
+
+def filterByWord(reviews,word):
+    return reviews.filter(lambda x: re.search(r"\b"+word+r"\b", str(x[0]), re.IGNORECASE)).map(lambda x: x[0])
+
+print(filterByWord(reviews, "sexy").take(2))
 
 ####################### PAROLE CHE SI RIPETONO PIU VOLTE IN POS./NEG. ######################
 
