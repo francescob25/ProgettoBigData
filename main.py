@@ -1,21 +1,62 @@
+#import pandas as pd
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
-
 import os
 import sys
 
+
+############################### CONFIGURAZIONE ########################################
 os.environ['PYSPARK_PYTHON'] = sys.executable
 os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
-
+#recensioni=pd.read_csv("IMDBDataset.csv")
 spark = SparkSession.builder.appName("IMDB_Sentiment").master("local[*]").getOrCreate() # tutte le query fatte qua le eseguiamo sul cluster
-conf_spark = SparkConf()
+conf_spark= SparkConf()
 conf_spark.setAppName("IMDB_Sentiment").set("spark.executor.memory", "4g")
 sc = spark.sparkContext #8 core = 8 worker -> crea una versione locale con numero di thread pari a numero di core della macchina
 sc.setLogLevel("ERROR")
-rdd_pyspark = sc.textFile("IMDBDataset.csv")
-reviews = rdd_pyspark.map(lambda x: x.rsplit(",", 1))
+rdd_pyspark = sc.textFile("IMDBDataset.csv") #lista di stringhe
+reviews = rdd_pyspark.map(lambda x: x.rsplit(',',1)) ## lista di liste
 
-positiveReviews = reviews.filter(lambda x: x[1] == "positive")
-negativeReviews = reviews.filter(lambda x: x[1] == "negative")
-print("Num recensioni positive: " + str(positiveReviews.count()))
-print("Num recensioni negative: " + str(negativeReviews.count()))
+
+########################### PREPROCESSING DEI DATI ################################
+
+reviews = reviews.filter(lambda x: str(x[0]).__contains__("<br />")).map(lambda x: [x[0].replace("<br /><br />", " "),x[1]]) #da un'analisi fatta le recensioni possono avere solo doppi break
+
+####################### RECENSIONI POSITIVE E NEGATIVE ############################
+
+def filterbypositive(reviews):
+    return reviews.filter(lambda x: x[1] == 'positive').map(lambda x: x[0])
+
+def filterbynegative(reviews):
+    return reviews.filter(lambda x: x[1] == 'negative').map(lambda x: x[0])
+
+####################### RECENSIONI PIU LUNGHE/CORTE ############################
+
+def orderbylongreviews(reviews):
+    return reviews.sortBy(lambda x: len(x[0]), False).map(lambda x: x[0])
+
+def orderbyshortreviews(reviews):
+    return reviews.sortBy(lambda x: len(x[0]), True).map(lambda x: x[0])
+
+
+############################ PAROLE CHE SI RIPETONO PIU VOLTE ############################
+
+
+
+################################# RECENSIONI CON SPOILER ##################################
+
+print(reviews.filter(lambda x: str(x[0]).upper().__contains__("SPOILER") and not(str(x[0]).upper().__contains__("NO SPOILER"))).count())
+
+####################### PAROLE CHE SI RIPETONO PIU VOLTE IN POS./NEG. ######################
+
+
+############################ PREDICI SENTIMENT CON MLIB ######################################
+
+# line.flatMap(lambda line: line.split(" "))
+
+#counts = rdd_pyspark.flatMap(lambda line: line.split(" ")).map(lambda word:(word, 1)).reduceByKey(lambda a,b: a+b).collect()
+#print(counts)
+
+#print(rdd_pyspark.flatmap(lambda line: line.split(" ")).collect())
+#items_list=rdd_pyspark.take(5)
+#print(items_list)
