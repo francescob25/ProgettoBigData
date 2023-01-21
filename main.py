@@ -24,18 +24,18 @@ reviews = reviews.filter(lambda x: str(x[0]).__contains__("<br />")).map(lambda 
 
 ####################### RECENSIONI POSITIVE E NEGATIVE ############################
 
-def filterbypositive(reviews):
+def filterByPositive(reviews):
     return reviews.filter(lambda x: x[1] == 'positive').map(lambda x: x[0])
 
-def filterbynegative(reviews):
+def filterByNegative(reviews):
     return reviews.filter(lambda x: x[1] == 'negative').map(lambda x: x[0])
 
 ####################### RECENSIONI PIU LUNGHE/CORTE ############################
 
-def orderbylongreviews(reviews):
+def orderByLongReiews(reviews):
     return reviews.sortBy(lambda x: len(x[0]), False).map(lambda x: x[0])
 
-def orderbyshortreviews(reviews):
+def orderByShortReviews(reviews):
     return reviews.sortBy(lambda x: len(x[0]), True).map(lambda x: x[0])
 
 
