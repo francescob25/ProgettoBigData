@@ -32,7 +32,7 @@ def filterByNegative(reviews):
 
 ####################### RECENSIONI PIU LUNGHE/CORTE ############################
 
-def orderByLongReiews(reviews):
+def orderByLongReviews(reviews):
     return reviews.sortBy(lambda x: len(x[0]), False).map(lambda x: x[0])
 
 def orderByShortReviews(reviews):
