@@ -38,14 +38,16 @@ def orderByLongReviews(reviews):
 def orderByShortReviews(reviews):
     return reviews.sortBy(lambda x: len(x[0]), True).map(lambda x: x[0])
 
-
 ############################ PAROLE CHE SI RIPETONO PIU VOLTE ############################
 
 
 
 ################################# RECENSIONI CON SPOILER ##################################
+def filterBySpoilers(reviews):
+    return reviews.filter(lambda x: str(x[0]).upper().__contains__("*SPOILER")).map(lambda x: x[0])
 
-print(reviews.filter(lambda x: str(x[0]).upper().__contains__("SPOILER") and not(str(x[0]).upper().__contains__("NO SPOILER"))).count())
+def filterByNoSpoilers(reviews):
+    return reviews.filter(lambda x: not(str(x[0]).upper().__contains__("*SPOILER"))).map(lambda x: x[0])
 
 ####################### PAROLE CHE SI RIPETONO PIU VOLTE IN POS./NEG. ######################
 
