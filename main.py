@@ -33,10 +33,10 @@ reviews = reviews.filter(lambda x: str(x[0]).__contains__("<br />")).map(lambda 
 ####################### RECENSIONI POSITIVE E NEGATIVE ############################
 
 def filterByPositive(reviews):
-    return reviews.filter(lambda x: x[1] == 'positive').map(lambda x: x[0])
+    return reviews.filter(lambda x: x[1] == 'positive')
 
 def filterByNegative(reviews):
-    return reviews.filter(lambda x: x[1] == 'negative').map(lambda x: x[0])
+    return reviews.filter(lambda x: x[1] == 'negative')
 
 ####################### RECENSIONI PIU LUNGHE/CORTE ############################
 
@@ -68,6 +68,13 @@ def filterByWord(reviews,word):
 
 ####################### PAROLE CHE SI RIPETONO PIU VOLTE IN POS./NEG. ######################
 
+def mostFrequentlyPositiveWords(reviews):
+    positiveReviews = filterByPositive(reviews)
+    return wordsMostFrequently(positiveReviews)
+
+def mostFrequentlyNegativeWords(reviews):
+    negativeReviews = filterByNegative(reviews)
+    return wordsMostFrequently(negativeReviews)
 
 ############################ PREDICI SENTIMENT CON MLIB ######################################
 
