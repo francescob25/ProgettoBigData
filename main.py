@@ -78,11 +78,3 @@ def mostFrequentlyNegativeWords(reviews):
 
 ############################ PREDICI SENTIMENT CON MLIB ######################################
 
-# line.flatMap(lambda line: line.split(" "))
-
-
-#print(counts)
-
-#print(rdd_pyspark.flatmap(lambda line: line.split(" ")).collect())
-#items_list=rdd_pyspark.take(5)
-#print(items_list)
