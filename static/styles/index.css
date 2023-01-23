@@ -1,0 +1,16 @@
+.card-margin {
+    margin-left: 10rem;
+    margin-right: 10rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+nav {
+    /*
+    text-align: center;
+    top: 0;
+    width: 100%;
+    */
+    top: 0;
+    position: sticky !important;
+}
