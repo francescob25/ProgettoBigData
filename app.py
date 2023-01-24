@@ -11,4 +11,5 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     positiveReviews = main.filterByPositive(main.reviews).take(6)
-    return render_template('index.html', positiveReviews=positiveReviews)
+    allReviews = main.reviews.take(6)
+    return render_template('index.html', allReviews = allReviews, positiveReviews = positiveReviews)

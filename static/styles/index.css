@@ -12,6 +12,40 @@
     margin-bottom: 2rem;
     box-shadow: 5px 5px 10px #888888;
     border-radius: 20px;
+    border-color: #caff8e;
+    background-color: #caff8e;
+}
+
+.card-margin3 {
+    margin-left: 6rem;
+    margin-right: 6rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 5px 5px 10px #888888;
+    border-radius: 20px;
+    border-color: #ff797d;
+    background-color: #ff797d;
+}
+
+.button1-settings{
+    height: 41px;
+    width: 100px;
+    background-color: transparent;
+    font-family: "Times New Roman";
+    font-weight: bold;
+    border-radius: 10px;
+    border-width: 2px;
+    margin-right: 5px;
+}
+
+.button2-settings{
+    height: 41px;
+    width: 200px;
+    background-color: transparent;
+    font-family: "Times New Roman";
+    font-weight: bold;
+    border-radius: 10px;
+    border-width: 2px;
 }
 
 nav {
@@ -19,4 +53,15 @@ nav {
     top: 0;
     z-index: 2;
     width: 100%;
+}
+
+.nav-pagination{
+    float: right;
+    margin-right: 10rem;
+    margin-bottom: 4rem;
+}
+
+.page-settings {
+    background-color: goldenrod;
+    color: black;
 }
