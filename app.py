@@ -8,8 +8,12 @@ import main
 
 app = Flask(__name__)
 
+@app.route('/positive')
+def getPositive():
+    positive=main.filterByPositive(main.reviews).take(6)
+    return render_template('index.html', reviews = positive)
+
 @app.route('/')
 def index():
-    positiveReviews = main.filterByPositive(main.reviews).take(6)
-    allReviews = main.reviews.take(6)
-    return render_template('index.html', allReviews = allReviews, positiveReviews = positiveReviews)
+    reviews=main.reviews.take(6)
+    return render_template('index.html', reviews = reviews)
