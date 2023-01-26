@@ -29,7 +29,7 @@ def splitAndProcess(words: str):
     return [processWord(word) for word in words.split()]
 
 
-reviews = reviews.map(lambda x: [x[0].replace("<br /><br />", " "),x[1]]) #da un'analisi fatta le recensioni possono avere solo doppi break
+reviews = reviews.map(lambda x: [x[0].replace("<br /><br />", " "), x[1]]) #da un'analisi fatta le recensioni possono avere solo doppi break
 namesOfColumns = reviews.first()
 reviews = reviews.filter(lambda x: x != namesOfColumns)
 
@@ -59,15 +59,15 @@ def wordsMostFrequently(reviews):
 ################################# RECENSIONI CON SPOILER ##################################
 
 def filterBySpoilers(reviews):
-    return reviews.filter(lambda x: str(x[0]).upper().__contains__("*SPOILER")).map(lambda x: x[0])
+    return reviews.filter(lambda x: str(x[0]).upper().__contains__("*SPOILER"))
 
 def filterByNoSpoilers(reviews):
-    return reviews.filter(lambda x: not(str(x[0]).upper().__contains__("*SPOILER"))).map(lambda x: x[0])
+    return reviews.filter(lambda x: not(str(x[0]).upper().__contains__("*SPOILER")))
 
 ###################################### CERCA PER PAROLA ###################################
 
 def filterByWord(reviews,word):
-    return reviews.filter(lambda x: re.search(r"\b"+word+r"\b", str(x[0]), re.IGNORECASE)).map(lambda x: x[0])
+    return reviews.filter(lambda x: re.search(r"\b"+word+r"\b", str(x[0]), re.IGNORECASE))
 
 ####################### PAROLE CHE SI RIPETONO PIU VOLTE IN POS./NEG. ######################
 
@@ -80,5 +80,3 @@ def mostFrequentlyNegativeWords(reviews):
     return wordsMostFrequently(negativeReviews)
 
 ############################ PREDICI SENTIMENT CON MLIB ######################################
-
-print(reviews.count())

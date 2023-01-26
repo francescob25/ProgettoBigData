@@ -7,12 +7,31 @@
     background-color: #202020;
 }
 
+.card-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.card-title {
+    margin-left: 1rem;
+    margin-top: 0.20rem;
+    font-weight: bold;
+}
+
+.card-reaction {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+}
+
 .card-positive-margin {
     margin-left: 6rem;
     margin-right: 6rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
-    box-shadow: 5px 5px 10px #888888;
+    box-shadow: 3px 3px 5px black;
     border-radius: 20px;
     border-color: #caff8e;
     background-color: #caff8e;
@@ -23,10 +42,27 @@
     margin-right: 6rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
-    box-shadow: 5px 5px 10px #888888;
+    box-shadow: 3px 3px 5px black;
     border-radius: 20px;
     border-color: #ff797d;
     background-color: #ff797d;
+}
+
+.card-count-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.card-count {
+    display: inline-block;
+    background-color: goldenrod;
+    border-color: black;
+    box-shadow: 3px 3px 5px black;
+    color: black;
+    margin: 2rem;
+    text-align: center;
+    font-weight: bold;
 }
 
 .button1-settings {
