@@ -28,7 +28,10 @@ def processWord(word: str):
 def splitAndProcess(words: str):
     return [processWord(word) for word in words.split()]
 
-reviews = reviews.filter(lambda x: str(x[0]).__contains__("<br />")).map(lambda x: [x[0].replace("<br /><br />", " "),x[1]]) #da un'analisi fatta le recensioni possono avere solo doppi break
+
+reviews = reviews.map(lambda x: [x[0].replace("<br /><br />", " "),x[1]]) #da un'analisi fatta le recensioni possono avere solo doppi break
+namesOfColumns = reviews.first()
+reviews = reviews.filter(lambda x: x != namesOfColumns)
 
 ####################### RECENSIONI POSITIVE E NEGATIVE ############################
 
@@ -78,3 +81,4 @@ def mostFrequentlyNegativeWords(reviews):
 
 ############################ PREDICI SENTIMENT CON MLIB ######################################
 
+print(reviews.count())
