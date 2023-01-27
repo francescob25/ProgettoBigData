@@ -26,7 +26,7 @@ def index():
     filteredWithoutSpoilers = False
     filteredWithSpoilers = False
     currentReviews = main.reviews
-    return render_template('index.html', reviews=currentReviews.take(6))
+    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
 
 @app.route('/positive')
 def getPositive():
@@ -47,7 +47,7 @@ def getPositive():
         currentReviews = main.filterByNoSpoilers(currentReviews)
     elif (filteredWithSpoilers):
         currentReviews = main.filterBySpoilers(currentReviews)
-    return render_template('index.html', reviews=currentReviews.take(6))
+    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
 
 @app.route('/negative')
 def getNegative():
@@ -68,7 +68,7 @@ def getNegative():
         currentReviews = main.filterByNoSpoilers(currentReviews)
     elif (filteredWithSpoilers):
         currentReviews = main.filterBySpoilers(currentReviews)
-    return render_template('index.html', reviews=currentReviews.take(6))
+    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
 
 @app.route('/shorter')
 def orderByShorterReviews():
@@ -84,7 +84,7 @@ def orderByShorterReviews():
         elif (filteredWithSpoilers): currentReviews = main.filterBySpoilers(currentReviews)
     orderedByShorter = not orderedByShorter
     orderedByLonger = False
-    return render_template('index.html', reviews=currentReviews.take(6))
+    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
 
 @app.route('/longer')
 def orderByLongerReviews():
@@ -100,7 +100,7 @@ def orderByLongerReviews():
         elif (filteredWithSpoilers): currentReviews = main.filterBySpoilers(currentReviews)
     orderedByLonger = not orderedByLonger
     orderedByShorter = False
-    return render_template('index.html', reviews=currentReviews.take(6))
+    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
 
 @app.route('/withoutSpoilers')
 def getReviewsWithoutSpoilers():
@@ -121,7 +121,7 @@ def getReviewsWithoutSpoilers():
         currentReviews = main.filterByPositive(currentReviews)
     elif (filteredByNegative):
         currentReviews = main.filterByNegative(currentReviews)
-    return render_template('index.html', reviews=currentReviews.take(6))
+    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
 
 @app.route('/withSpoilers')
 def getReviewsWithSpoilers():
@@ -142,12 +142,14 @@ def getReviewsWithSpoilers():
         currentReviews = main.filterByPositive(currentReviews)
     elif (filteredByNegative):
         currentReviews = main.filterByNegative(currentReviews)
-    return render_template('index.html', reviews=currentReviews.take(6))
+    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
 
+def getFlags():
+    return [filteredByPositive, filteredByNegative, filteredWithSpoilers, filteredWithoutSpoilers, orderedByShorter, orderedByLonger]
 
 def stampaBooleani():
     print("positive: " + str(filteredByPositive))
-    print("negative: " + str(filteredByNegative))
+    print("negative: " + str(filteredByPositive))
     print("No Spoilers: " + str(filteredWithoutSpoilers))
     print("Spoilers: " + str(filteredWithSpoilers))
     print("shorter: " + str(orderedByShorter))

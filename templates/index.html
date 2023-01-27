@@ -9,6 +9,7 @@
 
 </head>
 <body style="background-color:black;">
+
 <nav class="navbar bg-warning" data-bs-theme="warning">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
@@ -64,8 +65,8 @@
             Order by
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/shorter">Shorter reviews</a></li>
-            <li><a class="dropdown-item" href="/longer">Longer reviews</a></li>
+            <li><a class="dropdown-item {{'selected' if flags[4]}}" href="/shorter">Shorter reviews</a></li>
+            <li><a class="dropdown-item {{'selected' if flags[5]}}" href="/longer">Longer reviews</a></li>
         </ul>
     </div>
 
@@ -74,10 +75,18 @@
             Filter by
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/positive">Positive reviews</a></li>
-            <li><a class="dropdown-item" href="/negative">Negative reviews</a></li>
-            <li><a class="dropdown-item" href="/withSpoilers">With spoilers</a></li>
-            <li><a class="dropdown-item" href="/withoutSpoilers">Without spoilers</a></li>
+            <li class="dropdown-item"> Sentiment
+                <ul>
+                    <li><a class="dropdown-item {{'selected' if flags[0]}}" href="/positive">Positive reviews</a></li>
+                    <li><a class="dropdown-item {{'selected' if flags[1]}}" href="/negative">Negative reviews</a></li>
+                </ul>
+            </li>
+            <li class="dropdown-item">Spoilers
+                <ul>
+                    <li><a class="dropdown-item {{'selected' if flags[2]}}" href="/withSpoilers">With spoilers</a></li>
+                    <li><a class="dropdown-item {{'selected' if flags[3]}}" href="/withoutSpoilers">Without spoilers</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
 

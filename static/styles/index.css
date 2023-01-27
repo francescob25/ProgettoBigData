@@ -143,6 +143,11 @@ nav {
     color: goldenrod;
 }
 
+.dropdown-item.selected {
+    background-color: #202020;
+    color: goldenrod;
+}
+
 form {
     flex: auto;
 }
