@@ -10,6 +10,17 @@
 </head>
 <body style="background-color:black;">
 
+<script>
+    fetch('/counting')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("totalCount").innerHTML = "Total reviews: " + data[0];
+            document.getElementById("positiveCount").innerHTML = "Positive reviews: " + data[1];
+            document.getElementById("negativeCount").innerHTML = "Negative reviews: " + data[2];
+        })
+        .catch(error => console.error(error));
+</script>
+
 <nav class="navbar bg-warning" data-bs-theme="warning">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
@@ -18,14 +29,38 @@
                  class="d-inline-block align-text-top">
             IMDb Movie Reviews
         </a>
-        <div style="float:right;">
-            <a href="#">
-                <button class="button1-settings">STATS</button>
-            </a>
-            <button class="button2-settings">PREDICT SENTIMENT</button>
+        <div>
+            <button type="button" class="btn btn-outline btn-nav stats-margin"> STATS </button>
+            <button type="button" class="btn btn-outline btn-nav" data-bs-toggle="modal" data-bs-target="#predictModal"> PREDICT SENTIMENT </button>
         </div>
     </div>
 </nav>
+
+<div class="modal fade" id="predictModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"> Predict review sentiment </h1>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label"> Write your review: </label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+                <div class="sentiment-result mb-3">
+                    <span> Sentiment predicted: </span>
+                    &nbsp;
+                    <span class="fw-bold"> POSITIVE/NEGATIVE </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Close </button>
+                <button type="button" class="btn btn-secondary"> Predict </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <img src="https://studentiunical-my.sharepoint.com/:i:/r/personal/grcmrc99t22g273f_studenti_unical_it/Documents/bigdataproject/Immagini%20Progetto/Copertina.png?csf=1&web=1&e=AI3dFP"
@@ -33,13 +68,12 @@
 
 <div class="search">
 
-    <form class="row g-3">
+    <form class="row g-3" action="/search">
         <div class="col-auto input-search">
-            <label for="inputPassword2" class="visually-hidden">Search...</label>
-            <input type="search" class="form-control" id="inputPassword2" placeholder="Search...">
+            <input type="text" class="form-control" name="searchString" placeholder="Search...">
         </div>
         <div class="col-auto">
-            <button type="submit" class="btn btn-primary mb-3">
+            <button type="submit" class="btn btn-secondary mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
                      viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -47,19 +81,7 @@
             </button>
         </div>
     </form>
-<!--
-    <select class="form-select" aria-label="Default select example">
-        <option selected>All reviews</option>
-        <optgroup label="Sentiment">
-            <option value="1">Positive</option>
-            <option value="2">Negative</option>
-        </optgroup>
-        <optgroup label="Spoilers">
-            <option value="3">With spoilers</option>
-            <option value="4">Without spoilers</option>
-        </optgroup>
-    </select>
--->
+
     <div class="dropdown dd-order">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             Order by
@@ -75,42 +97,51 @@
             Filter by
         </button>
         <ul class="dropdown-menu">
-            <li class="dropdown-item"> Sentiment
-                <ul>
-                    <li><a class="dropdown-item {{'selected' if flags[0]}}" href="/positive">Positive reviews</a></li>
-                    <li><a class="dropdown-item {{'selected' if flags[1]}}" href="/negative">Negative reviews</a></li>
-                </ul>
-            </li>
-            <li class="dropdown-item">Spoilers
-                <ul>
-                    <li><a class="dropdown-item {{'selected' if flags[2]}}" href="/withSpoilers">With spoilers</a></li>
-                    <li><a class="dropdown-item {{'selected' if flags[3]}}" href="/withoutSpoilers">Without spoilers</a></li>
-                </ul>
-            </li>
+            <li><a class="dropdown-item {{'selected' if flags[0]}}" href="/positive">Positive reviews</a></li>
+            <li><a class="dropdown-item {{'selected' if flags[1]}}" href="/negative">Negative reviews</a></li>
+            <hr>
+            <li><a class="dropdown-item {{'selected' if flags[2]}}" href="/withSpoilers">With spoilers</a></li>
+            <li><a class="dropdown-item {{'selected' if flags[3]}}" href="/withoutSpoilers">Without spoilers</a></li>
         </ul>
     </div>
 
 </div>
 
+{% if flags[6] != "" %}
+<div class="search-result">
+    <span> Results for: </span>
+    &nbsp;
+    <span class="fw-bold"> "{{ flags[6] }}" </span>
+    <a href="/cancelResearch">
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </a>
+</div>
+{% endif %}
+
 <div class="card card-margin">
     <div class="card-body">
+
         <div class="card-count-container">
-            <div class="card card-count">
-                <div class="card-body">
-                    Conteggio totale
+            <div class="card card-count-total">
+                <div id="totalCount" class="card-body">
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    Loading ...
                 </div>
             </div>
-            <div class="card card-count">
-                <div class="card-body">
-                    Conteggio positive
+            <div class="card card-count-positive">
+                <div id="positiveCount" class="card-body">
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    Loading ...
                 </div>
             </div>
-            <div class="card card-count">
-                <div class="card-body">
-                    Conteggio negative
+            <div class="card card-count-negative">
+                <div id="negativeCount" class="card-body">
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    Loading ...
                 </div>
             </div>
         </div>
+
         {% for review in reviews %}
         {% if review[1] == "positive" %}
         <div class="card card-positive-margin">

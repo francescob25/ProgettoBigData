@@ -54,7 +54,7 @@
     justify-content: center;
 }
 
-.card-count {
+.card-count-total {
     display: inline-block;
     background-color: goldenrod;
     border-color: black;
@@ -62,7 +62,36 @@
     color: black;
     margin: 2rem;
     text-align: center;
+    font-size: 10pt;
     font-weight: bold;
+}
+
+.card-count-positive {
+    display: inline-block;
+    background-color: #caff8e;
+    border-color: #caff8e;
+    box-shadow: 3px 3px 5px black;
+    color: black;
+    margin: 2rem;
+    text-align: center;
+    font-size: 10pt;
+    font-weight: bold;
+}
+
+.card-count-negative {
+    display: inline-block;
+    background-color: #ff797d;
+    border-color: #ff797d;
+    box-shadow: 3px 3px 5px black;
+    color: black;
+    margin: 2rem;
+    text-align: center;
+    font-size: 10pt;
+    font-weight: bold;
+}
+
+.spinner-grow {
+    margin-right: 0.5rem;
 }
 
 .button1-settings {
@@ -115,10 +144,48 @@ nav {
     padding-right: 10rem;
 }
 
+.search-result {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 0rem;
+    padding-left: 10rem;
+    padding-right: 10rem;
+    color: goldenrod;
+    font-size: 10pt;
+}
+
+.btn-close {
+    background-color: #ff797d;
+    margin-left: 1rem;
+    padding: 0.25rem !important;
+}
+
+.btn-close:focus {
+    box-shadow: none;
+}
+
 .btn {
     background-color: goldenrod;
     color: black;
     border-color: #202020;
+}
+
+.btn-nav {
+    border-color: goldenrod;
+    font-size: 11pt;
+    font-weight: bold;
+    box-shadow: 1px 1px 2px black;
+}
+
+.btn-nav:hover {
+    border-color: black !important;
+    box-shadow: none;
+}
+
+.stats-margin {
+    margin-right: 1rem;
 }
 
 .btn:hover {
@@ -163,8 +230,42 @@ form {
 .form-control {
     background-color: #202020;
     border-color: goldenrod;
+    color: goldenrod;
+}
+
+.form-control:focus {
+    background-color: #202020;
+    border-color: goldenrod;
+    box-shadow: none !important;
+    color: goldenrod;
+}
+
+.form-control::placeholder {
+    color: gray;
 }
 
 .search-label {
+    color: goldenrod;
+}
+
+.modal-content {
+    background-color: #151515;
+    box-shadow: 0 0 20px 5px black;
+}
+
+.modal-header {
+    border-bottom: 2px solid #202020;
+}
+
+.sentiment-result {
+    margin-top: 2rem;
+    color: goldenrod;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+.modal-title, .form-label {
     color: goldenrod;
 }
