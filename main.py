@@ -12,13 +12,14 @@ os.environ['PYSPARK_PYTHON'] = sys.executable
 os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
 #recensioni=pd.read_csv("IMDBDataset.csv")
 spark = SparkSession.builder.appName("IMDB_Sentiment").master("local[*]").getOrCreate() # tutte le query fatte qua le eseguiamo sul cluster
-conf_spark= SparkConf()
+conf_spark = SparkConf()
 conf_spark.setAppName("IMDB_Sentiment").set("spark.executor.memory", "4g")
 sc = spark.sparkContext #8 core = 8 worker -> crea una versione locale con numero di thread pari a numero di core della macchina
 sc.setLogLevel("ERROR")
 rdd_pyspark = sc.textFile("IMDBDataset.csv") #lista di stringhe
+rdd_pyspark.persist()
 stopwords = sc.textFile("stopwords.txt").collect() #lista di stringhe
-reviews = rdd_pyspark.map(lambda x: x.rsplit(',',1)) ## lista di liste
+reviews = rdd_pyspark.map(lambda x: x.rsplit(',', 1)) ## lista di liste
 
 ########################### PREPROCESSING DEI DATI ################################
 
@@ -59,10 +60,10 @@ def wordsMostFrequently(reviews):
 ################################# RECENSIONI CON SPOILER ##################################
 
 def filterBySpoilers(reviews):
-    return reviews.filter(lambda x: str(x[0]).upper().__contains__("*SPOILER"))
+    return reviews.filter(lambda x: (x[0].upper().count("SPOILER") - x[0].upper().count("NO SPOILER")) > 0)
 
 def filterByNoSpoilers(reviews):
-    return reviews.filter(lambda x: not(str(x[0]).upper().__contains__("*SPOILER")))
+    return reviews.filter(lambda x: (x[0].upper().count("SPOILER") - x[0].upper().count("NO SPOILER")) <= 0)
 
 ###################################### CERCA PER PAROLA ###################################
 
