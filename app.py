@@ -186,6 +186,12 @@ def getCounting():
     counting = [currentReviews.count(), main.filterByPositive(currentReviews).count(), main.filterByNegative(currentReviews).count()]
     return counting
 
+@app.route('/predict')
+def predictSentiment():
+    userReview = request.args.get('userReview')
+    sentiment = main.predict_sentiment(userReview)
+    return str(sentiment)
+
 def getFlags():
     return [filteredByPositive, filteredByNegative, filteredWithSpoilers, filteredWithoutSpoilers, orderedByShorter, orderedByLonger, searchString]
 
