@@ -216,11 +216,43 @@
 </div>
 <div class="nav nav-pagination">
     <ul class="pagination">
-        <li class="page-item"><a class="page-link page-settings" href="#">Previous</a></li>
-        <li class="page-item"><a class="page-link page-settings" href="#">1</a></li>
-        <li class="page-item"><a class="page-link page-settings" href="#">2</a></li>
-        <li class="page-item"><a class="page-link page-settings" href="#">3</a></li>
-        <li class="page-item"><a class="page-link page-settings" href="#">Next</a></li>
+
+        <li class="page-item">
+            <a class="page-link page-settings {{ 'disabled' if page <= 1 }}" href="/pagination?page={{ page-1 }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                </svg>
+                Previous
+            </a>
+        </li>
+
+        {% if page == 1 %}
+        <li class="page-item"><a class="page-link page-settings current-page" href="/pagination?page={{ page }}"> 1 </a></li>
+        <li class="page-item"><a class="page-link page-settings" href="/pagination?page={{ page+1 }}"> 2 </a></li>
+        <li class="page-item"><a class="page-link page-settings" href="/pagination?page={{ page+2 }}"> 3 </a></li>
+        {% endif %}
+
+        {% if (page > 1 and page < total_pages) %}
+        <li class="page-item"><a class="page-link page-settings" href="/pagination?page={{ page-1 }}"> {{ page-1 }} </a></li>
+        <li class="page-item"><a class="page-link page-settings current-page" href="/pagination?page={{ page }}"> {{ page }} </a></li>
+        <li class="page-item"><a class="page-link page-settings" href="/pagination?page={{ page+1 }}"> {{ page+1 }} </a></li>
+        {% endif %}
+
+        {% if page == total_pages %}
+        <li class="page-item"><a class="page-link page-settings" href="/pagination?page={{ page }}"> {{ page-2 }} </a></li>
+        <li class="page-item"><a class="page-link page-settings" href="/pagination?page={{ page+1 }}"> {{ page-1 }} </a></li>
+        <li class="page-item"><a class="page-link page-settings current-page" href="/pagination?page={{ page+2 }}"> {{ page }} </a></li>
+        {% endif %}
+
+        <li class="page-item">
+            <a class="page-link page-settings {{ 'disabled' if page == total_pages }}" href="/pagination?page={{ page+1 }}">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </a>
+        </li>
+
     </ul>
 </div>
 

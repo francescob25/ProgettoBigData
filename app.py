@@ -17,6 +17,24 @@ filteredWithSpoilers = False
 filteredWithoutSpoilers = False
 searchString = ""
 
+@app.route('/pagination')
+def pagination():
+    global currentReviews
+    # Impostiamo il numero di elementi per pagina
+    per_page = 6
+    # Otteniamo la pagina corrente dalla richiesta HTTP
+    page = int(request.args.get('page', 1))
+    # Calcoliamo il numero totale di pagine necessarie
+    total_pages = (currentReviews.count() + per_page - 1) // per_page
+    paginated_reviews = paginated_data(currentReviews.collect(), page, per_page)
+    return render_template('index.html', reviews=paginated_reviews, flags=getFlags(), page=page, total_pages=total_pages)
+
+def paginated_data(data, page, per_page):
+    start = (page - 1) * per_page
+    end = start + per_page
+    paginated_data = data[start:end]
+    return paginated_data
+
 @app.route('/')
 def index():
     global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter, orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
@@ -28,7 +46,9 @@ def index():
     filteredWithSpoilers = False
     searchString = ""
     currentReviews = main.reviews
-    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
+    total_pages = (currentReviews.count() + 6 - 1) // 6
+    paginated_reviews = paginated_data(currentReviews.collect(), 1, 6)
+    return render_template('index.html', reviews=paginated_reviews, flags=getFlags(), page=1, total_pages=total_pages)
 
 @app.route('/positive')
 def getPositive():
@@ -52,7 +72,9 @@ def getPositive():
     # controlliamo se era stato effettuata la ricerca per una determinata parola/frase
     if (searchString != ""):
         currentReviews = main.filterByWord(currentReviews, searchString)
-    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
+    total_pages = (currentReviews.count() + 6 - 1) // 6
+    paginated_reviews = paginated_data(currentReviews.collect(), 1, 6)
+    return render_template('index.html', reviews=paginated_reviews, flags=getFlags(), page=1, total_pages=total_pages)
 
 @app.route('/negative')
 def getNegative():
@@ -76,7 +98,9 @@ def getNegative():
     # controlliamo se era stato effettuata la ricerca per una determinata parola/frase
     if (searchString != ""):
         currentReviews = main.filterByWord(currentReviews, searchString)
-    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
+    total_pages = (currentReviews.count() + 6 - 1) // 6
+    paginated_reviews = paginated_data(currentReviews.collect(), 1, 6)
+    return render_template('index.html', reviews=paginated_reviews, flags=getFlags(), page=1, total_pages=total_pages)
 
 @app.route('/shorter')
 def orderByShorterReviews():
@@ -93,7 +117,9 @@ def orderByShorterReviews():
         if (searchString != ""): currentReviews = main.filterByWord(currentReviews, searchString)
     orderedByShorter = not orderedByShorter
     orderedByLonger = False
-    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
+    total_pages = (currentReviews.count() + 6 - 1) // 6
+    paginated_reviews = paginated_data(currentReviews.collect(), 1, 6)
+    return render_template('index.html', reviews=paginated_reviews, flags=getFlags(), page=1, total_pages=total_pages)
 
 @app.route('/longer')
 def orderByLongerReviews():
@@ -110,7 +136,9 @@ def orderByLongerReviews():
         if (searchString != ""): currentReviews = main.filterByWord(currentReviews, searchString)
     orderedByLonger = not orderedByLonger
     orderedByShorter = False
-    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
+    total_pages = (currentReviews.count() + 6 - 1) // 6
+    paginated_reviews = paginated_data(currentReviews.collect(), 1, 6)
+    return render_template('index.html', reviews=paginated_reviews, flags=getFlags(), page=1, total_pages=total_pages)
 
 @app.route('/withoutSpoilers')
 def getReviewsWithoutSpoilers():
@@ -134,7 +162,9 @@ def getReviewsWithoutSpoilers():
     # controlliamo se era stato effettuata la ricerca per una determinata parola/frase
     if (searchString != ""):
         currentReviews = main.filterByWord(currentReviews, searchString)
-    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
+    total_pages = (currentReviews.count() + 6 - 1) // 6
+    paginated_reviews = paginated_data(currentReviews.collect(), 1, 6)
+    return render_template('index.html', reviews=paginated_reviews, flags=getFlags(), page=1, total_pages=total_pages)
 
 @app.route('/withSpoilers')
 def getReviewsWithSpoilers():
@@ -158,14 +188,18 @@ def getReviewsWithSpoilers():
     # controlliamo se era stato effettuata la ricerca per una determinata parola/frase
     if (searchString != ""):
         currentReviews = main.filterByWord(currentReviews, searchString)
-    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
+    total_pages = (currentReviews.count() + 6 - 1) // 6
+    paginated_reviews = paginated_data(currentReviews.collect(), 1, 6)
+    return render_template('index.html', reviews=paginated_reviews, flags=getFlags(), page=1, total_pages=total_pages)
 
 @app.route('/search')
 def search():
     global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter, orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
     searchString = request.args.get('searchString')
     currentReviews = main.filterByWord(currentReviews, searchString)
-    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
+    total_pages = (currentReviews.count() + 6 - 1) // 6
+    paginated_reviews = paginated_data(currentReviews.collect(), 1, 6)
+    return render_template('index.html', reviews=paginated_reviews, flags=getFlags(), page=1, total_pages=total_pages)
 
 @app.route('/cancelResearch')
 def cancelResearch():
@@ -179,7 +213,9 @@ def cancelResearch():
     elif (filteredWithSpoilers): currentReviews = main.filterBySpoilers(currentReviews)
     if (orderedByShorter): currentReviews = main.orderByShortReviews(currentReviews)
     elif (orderedByLonger): currentReviews = main.orderByLongReviews(currentReviews)
-    return render_template('index.html', reviews=currentReviews.take(6), flags=getFlags())
+    total_pages = (currentReviews.count() + 6 - 1) // 6
+    paginated_reviews = paginated_data(currentReviews.collect(), 1, 6)
+    return render_template('index.html', reviews=paginated_reviews, flags=getFlags(), page=1, total_pages=total_pages)
 
 @app.route('/counting')
 def getCounting():

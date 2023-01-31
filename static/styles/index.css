@@ -124,12 +124,6 @@ nav {
     overflow: hidden;
 }
 
-.nav-pagination {
-    float: right;
-    margin-right: 10rem;
-    margin-bottom: 4rem;
-}
-
 .page-settings {
     background-color: goldenrod;
     color: black;
@@ -268,4 +262,55 @@ form {
 
 .modal-title, .form-label {
     color: goldenrod;
+}
+
+.nav-pagination {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4rem;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+}
+
+.bi-chevron-right {
+    margin-left: 5px;
+}
+
+.bi-chevron-left {
+    margin-right: 5px;
+}
+
+.page-link {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-color: black;
+}
+
+.page-link:hover {
+    background-color: #202020;
+    border-color: black;
+    color: goldenrod;
+}
+
+.page-link:focus {
+    background-color: #202020;
+    border-color: black;
+    color: goldenrod;
+    box-shadow: none;
+}
+
+.current-page {
+    background-color: gold;
+    font-size: 13pt;
+}
+
+.disabled {
+    background-color: #202020 !important;
+    border-color: black !important;
+    color: gray !important;
 }
