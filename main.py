@@ -18,7 +18,10 @@ sc = spark.sparkContext #8 core = 8 worker -> crea una versione locale con numer
 sc.setLogLevel("ERROR")
 rdd_pyspark = sc.textFile("IMDBDataset.csv") #lista di stringhe
 stopwords = sc.textFile("stopwords.txt").collect() #lista di stringhe
-reviews = rdd_pyspark.map(lambda x: x.rsplit(',', 1)).cache() ## lista di liste########################### PREPROCESSING DEI DATI ################################
+reviews = rdd_pyspark.map(lambda x: x.rsplit(',', 1)).cache() ## lista di liste
+
+
+# ########################### PREPROCESSING DEI DATI ################################
 
 def processWord(word: str):
     return re.sub("[^A-Za-z0-9]+", "", word.lower())

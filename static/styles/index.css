@@ -305,8 +305,16 @@ form {
 }
 
 .current-page {
-    background-color: gold;
-    font-size: 13pt;
+    background-color: goldenrod;
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.current-page:hover {
+    background-color: goldenrod;
+    color: black;
+    font-size: 14pt;
+    font-weight: bold;
 }
 
 .disabled {
