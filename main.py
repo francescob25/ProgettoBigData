@@ -1,5 +1,6 @@
 #import pandas as pd
 from pyspark import SparkConf
+from pyspark.ml.evaluation import BinaryClassificationEvaluator, MulticlassClassificationEvaluator
 from pyspark.sql import SparkSession
 import re
 import os
@@ -83,23 +84,37 @@ def mostFrequentlyNegativeWords(reviews):
 ############################ PREDICI SENTIMENT CON MLIB ######################################
 
 from pyspark.ml.feature import CountVectorizer, RegexTokenizer, StopWordsRemover
-from pyspark.sql.functions import col, when
+from pyspark.sql.functions import col, when, isnull
 from pyspark.ml.classification import NaiveBayes
 
 def predict_sentiment(review):
     global reviews
 
     regex_tokenizer = RegexTokenizer(inputCol="review", outputCol="words", pattern="\\W")
-    reviews_df = reviews.toDF(namesOfColumns)
+    reviews_df = reviews.toDF(namesOfColumns).cache()
+
+    # print(sum([reviews_df.filter(isnull(c)).count() for c in reviews_df.columns]))
+    # print(reviews_df.filter(reviews_df[1] == 'positive').count())
+    # print(reviews_df.filter(reviews_df[1] == 'negative').count())
+
     raw_words = regex_tokenizer.transform(reviews_df)
+
+    #print("Output regextokenizer:")
+    #print(raw_words.select("words").show(truncate=False))
 
     remover = StopWordsRemover(inputCol="words", outputCol="filtered")
     words_df = remover.transform(raw_words)
+
+    #print("Output stopwordsremover:")
+    #print(words_df.select("filtered").show(truncate=False))
 
     cv = CountVectorizer(inputCol="filtered", outputCol="features")
     model = cv.fit(words_df)
     countVectorizer_train = model.transform(words_df)
     countVectorizer_train = countVectorizer_train.withColumn("label", when(col('sentiment') == "positive", 1).otherwise(0))
+
+    #print("Output countvectorizer:")
+    #print(countVectorizer_train.select("features").show(truncate=False))
 
     (reviews_train, reviews_test) = countVectorizer_train.randomSplit([0.7, 0.3], seed=0)
 
@@ -107,20 +122,20 @@ def predict_sentiment(review):
     nbModel = nb.fit(reviews_train)
     nb_predictions = nbModel.transform(reviews_test)
 
-    # tokenize the review
+    #evaluator = MulticlassClassificationEvaluator(labelCol="label", predictionCol="prediction", metricName="accuracy")
+    #nb_accuracy = evaluator.evaluate(nb_predictions)
+    #print("Accuratezza NaiveBayes = %g"% (nb_accuracy))
+
+    # tokenizzazione della recensione
     tokenized_review = regex_tokenizer.transform(spark.createDataFrame([(review,)], ["review"]))
-    # remove stop words
+    # rimozione stopwords
     filtered_review = remover.transform(tokenized_review)
-    # create features using the trained CountVectorizer model
+    # creazione features usando il modello allenato a partire dal CountVectorizer
     features = model.transform(filtered_review)
-    # predict sentiment using the trained NaiveBayes model
+    # predizione sentiment usando il modello NaiveBayes
     prediction = nbModel.transform(features).select("prediction").collect()[0]["prediction"]
     return prediction
 
 
-# nbEval = BinaryClassificationEvaluator()
-# print('Test Area Under ROC', nbEval.evaluate(nb_predictions))
 
-# evaluator = MulticlassClassificationEvaluator(labelCol="label", predictionCol="prediction", metricName="accuracy")
-# nb_accuracy = evaluator.evaluate(nb_predictions)
-# print("Accuracy of NaiveBayes is = %g"% (nb_accuracy))
+
