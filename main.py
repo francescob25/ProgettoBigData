@@ -1,4 +1,3 @@
-#import pandas as pd
 from pyspark import SparkConf
 from pyspark.ml.evaluation import BinaryClassificationEvaluator, MulticlassClassificationEvaluator
 from pyspark.sql import SparkSession
@@ -53,10 +52,10 @@ def orderByShortReviews(reviews):
 
 ############################ PAROLE CHE SI RIPETONO PIU VOLTE ############################
 
-def wordsMostFrequently(reviews):
+def mostFrequentlyWords(reviews):
     countsRDD = reviews.flatMap(lambda x: splitAndProcess(x[0])).map(lambda word:(word, 1)).reduceByKey(lambda a,b: a+b)
-    orderedRDD = countsRDD.sortBy(lambda x: x[1], False).map(lambda x: x[0])
-    return orderedRDD.filter(lambda x: x not in stopwords)
+    orderedRDD = countsRDD.sortBy(lambda x: x[1], False)
+    return orderedRDD.filter(lambda x: x[0] not in stopwords)
 
 ################################# RECENSIONI CON SPOILER ##################################
 
@@ -75,11 +74,11 @@ def filterByWord(reviews,word):
 
 def mostFrequentlyPositiveWords(reviews):
     positiveReviews = filterByPositive(reviews)
-    return wordsMostFrequently(positiveReviews)
+    return mostFrequentlyWords(positiveReviews)
 
 def mostFrequentlyNegativeWords(reviews):
     negativeReviews = filterByNegative(reviews)
-    return wordsMostFrequently(negativeReviews)
+    return mostFrequentlyWords(negativeReviews)
 
 ############################ PREDICI SENTIMENT CON MLIB ######################################
 
@@ -137,5 +136,15 @@ def predict_sentiment(review):
     return prediction
 
 
+################################### EDA ####################################
+import plotly.express as px
+import pandas as pd
 
-
+def showFrequentlyWordsHistogram(words_count):
+    dict_words_count = dict(words_count.take(10))
+    temp = pd.DataFrame(columns=["Common Words", 'Count'])
+    temp["Common Words"] = list(dict_words_count.keys())
+    temp["Count"] = list(dict_words_count.values())
+    fig = px.bar(temp, x="Count", y="Common Words", title='Common Words in Reviews', orientation='h',
+                 width=700, height=700, color='Common Words')
+    fig.show()
