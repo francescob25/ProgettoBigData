@@ -1,4 +1,4 @@
-from pyspark import SparkConf
+from pyspark import SparkConf, RDD
 from pyspark.ml.evaluation import BinaryClassificationEvaluator, MulticlassClassificationEvaluator
 from pyspark.sql import SparkSession
 import re
@@ -52,10 +52,10 @@ def orderByShortReviews(reviews):
 
 ############################ PAROLE CHE SI RIPETONO PIU VOLTE ############################
 
-def mostFrequentlyWords(reviews):
-    countsRDD = reviews.flatMap(lambda x: splitAndProcess(x[0])).map(lambda word:(word, 1)).reduceByKey(lambda a,b: a+b)
-    orderedRDD = countsRDD.sortBy(lambda x: x[1], False)
-    return orderedRDD.filter(lambda x: x[0] not in stopwords)
+def mostFrequentlyWords(reviews: RDD):
+    counts_rdd = reviews.flatMap(lambda x: splitAndProcess(x[0])).map(lambda word:(word, 1)).reduceByKey(lambda a,b: a+b)
+    ordered_rdd = counts_rdd.sortBy(lambda x: x[1], False)
+    return ordered_rdd.filter(lambda x: x[0] not in stopwords)
 
 ################################# RECENSIONI CON SPOILER ##################################
 
@@ -147,4 +147,15 @@ def showFrequentlyWordsHistogram(words_count):
     temp["Count"] = list(dict_words_count.values())
     fig = px.bar(temp, x="Count", y="Common Words", title='Common Words in Reviews', orientation='h',
                  width=700, height=700, color='Common Words')
-    fig.show()
+    return fig.to_html(full_html=False)
+
+def frequentlyWordsHistogram():
+    words_count = mostFrequentlyWords(reviews)
+    dict_words_count = dict(words_count.take(10))
+    temp = pd.DataFrame(columns=["Common Words", 'Count'])
+    temp["Common Words"] = list(dict_words_count.keys())
+    temp["Count"] = list(dict_words_count.values())
+    fig = px.bar(temp, x="Count", y="Common Words", title='Common Words in Reviews', orientation='h',
+                 width=700, height=700, color='Common Words')
+    return fig.write_html("templates/plot.html")
+

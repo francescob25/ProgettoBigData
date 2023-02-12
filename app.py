@@ -37,7 +37,8 @@ def paginated_data(data, page, per_page):
 
 @app.route('/')
 def index():
-    global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter, orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
+    global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter,\
+        orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
     filteredByPositive = False
     filteredByNegative = False
     orderedByShorter = False
@@ -52,7 +53,8 @@ def index():
 
 @app.route('/positive')
 def getPositive():
-    global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter, orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
+    global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter,\
+        orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
     if (not filteredByPositive):
         currentReviews = main.filterByPositive(main.reviews)
     else:
@@ -78,7 +80,8 @@ def getPositive():
 
 @app.route('/negative')
 def getNegative():
-    global currentReviews, filteredByNegative, filteredByPositive, orderedByShorter, orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
+    global currentReviews, filteredByNegative, filteredByPositive, orderedByShorter,\
+        orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
     if (not filteredByNegative):
         currentReviews = main.filterByNegative(main.reviews)
     else:
@@ -104,7 +107,8 @@ def getNegative():
 
 @app.route('/shorter')
 def orderByShorterReviews():
-    global currentReviews, orderedByShorter, orderedByLonger, filteredByPositive, filteredByNegative, filteredWithoutSpoilers, filteredWithSpoilers, searchString
+    global currentReviews, orderedByShorter, orderedByLonger, filteredByPositive,\
+        filteredByNegative, filteredWithoutSpoilers, filteredWithSpoilers, searchString
     if (not orderedByShorter):
         currentReviews = main.orderByShortReviews(currentReviews)
     else:
@@ -123,7 +127,8 @@ def orderByShorterReviews():
 
 @app.route('/longer')
 def orderByLongerReviews():
-    global currentReviews, orderedByLonger, orderedByShorter, filteredByPositive, filteredByNegative, filteredWithoutSpoilers, filteredWithSpoilers, searchString
+    global currentReviews, orderedByLonger, orderedByShorter, filteredByPositive,\
+        filteredByNegative, filteredWithoutSpoilers, filteredWithSpoilers, searchString
     if (not orderedByLonger):
         currentReviews = main.orderByLongReviews(currentReviews)
     else:
@@ -142,7 +147,8 @@ def orderByLongerReviews():
 
 @app.route('/withoutSpoilers')
 def getReviewsWithoutSpoilers():
-    global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter, orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
+    global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter,\
+        orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
     if (not filteredWithoutSpoilers):
         currentReviews = main.filterByNoSpoilers(main.reviews)
     else:
@@ -168,7 +174,8 @@ def getReviewsWithoutSpoilers():
 
 @app.route('/withSpoilers')
 def getReviewsWithSpoilers():
-    global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter, orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
+    global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter,\
+        orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
     if (not filteredWithSpoilers):
         currentReviews = main.filterBySpoilers(main.reviews)
     else:
@@ -194,7 +201,8 @@ def getReviewsWithSpoilers():
 
 @app.route('/search')
 def search():
-    global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter, orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
+    global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter,\
+        orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
     searchString = request.args.get('searchString')
     currentReviews = main.filterByWord(currentReviews, searchString)
     total_pages = (currentReviews.count() + 6 - 1) // 6
@@ -203,7 +211,8 @@ def search():
 
 @app.route('/cancelResearch')
 def cancelResearch():
-    global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter, orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
+    global currentReviews, filteredByPositive, filteredByNegative, orderedByShorter,\
+        orderedByLonger, filteredWithoutSpoilers, filteredWithSpoilers, searchString
     searchString = ""
     currentReviews = main.reviews
     # controlliamo tutti i filtri e gli ordinamenti
@@ -228,14 +237,9 @@ def predictSentiment():
     sentiment = main.predict_sentiment(userReview)
     return str(sentiment)
 
+@app.route('/stats')
+def stats():
+    return render_template('stats.html')
+
 def getFlags():
     return [filteredByPositive, filteredByNegative, filteredWithSpoilers, filteredWithoutSpoilers, orderedByShorter, orderedByLonger, searchString]
-
-def stampaBooleani():
-    print("positive: " + str(filteredByPositive))
-    print("negative: " + str(filteredByPositive))
-    print("No Spoilers: " + str(filteredWithoutSpoilers))
-    print("Spoilers: " + str(filteredWithSpoilers))
-    print("shorter: " + str(orderedByShorter))
-    print("longer: " + str(orderedByLonger))
-    return
