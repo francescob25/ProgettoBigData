@@ -140,22 +140,32 @@ def predict_sentiment(review):
 import plotly.express as px
 import pandas as pd
 
-def showFrequentlyWordsHistogram(words_count):
-    dict_words_count = dict(words_count.take(10))
-    temp = pd.DataFrame(columns=["Common Words", 'Count'])
-    temp["Common Words"] = list(dict_words_count.keys())
-    temp["Count"] = list(dict_words_count.values())
-    fig = px.bar(temp, x="Count", y="Common Words", title='Common Words in Reviews', orientation='h',
-                 width=700, height=700, color='Common Words')
-    return fig.to_html(full_html=False)
-
 def frequentlyWordsHistogram():
     words_count = mostFrequentlyWords(reviews)
     dict_words_count = dict(words_count.take(10))
     temp = pd.DataFrame(columns=["Common Words", 'Count'])
     temp["Common Words"] = list(dict_words_count.keys())
     temp["Count"] = list(dict_words_count.values())
-    fig = px.bar(temp, x="Count", y="Common Words", title='Common Words in Reviews', orientation='h',
-                 width=700, height=700, color='Common Words')
-    return fig.write_html("templates/plot.html")
+    fig = px.bar(temp, x="Count", y="Common Words", title='Common Words in All Reviews', orientation='h',
+                 width=1010, height=700, color='Common Words')
+    return fig.write_html("static/graphs/plot_all.html")
 
+def frequentlyWordsPositiveHistogram():
+    words_count = mostFrequentlyPositiveWords(reviews)
+    dict_words_count = dict(words_count.take(10))
+    temp = pd.DataFrame(columns=["Common Words", 'Count'])
+    temp["Common Words"] = list(dict_words_count.keys())
+    temp["Count"] = list(dict_words_count.values())
+    fig = px.bar(temp, x="Count", y="Common Words", title='Common Words in Positive Reviews', orientation='h',
+                 width=1010, height=700, color='Common Words')
+    return fig.write_html("static/graphs/plot_positive.html")
+
+def frequentlyWordsNegativeHistogram():
+    words_count = mostFrequentlyNegativeWords(reviews)
+    dict_words_count = dict(words_count.take(10))
+    temp = pd.DataFrame(columns=["Common Words", 'Count'])
+    temp["Common Words"] = list(dict_words_count.keys())
+    temp["Count"] = list(dict_words_count.values())
+    fig = px.bar(temp, x="Count", y="Common Words", title='Common Words in Negative Reviews', orientation='h',
+                 width=1010, height=700, color='Common Words')
+    return fig.write_html("static/graphs/plot_negative.html")
